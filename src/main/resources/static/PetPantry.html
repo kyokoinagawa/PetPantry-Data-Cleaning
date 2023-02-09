@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- Bootstrap: -->
+    <!-- https://getbootstrap.com/docs/4.6/getting-started/introduction/ -->
+    <!-- <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"> -->
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<style>
+    /* REALLY BASIC STYLES: */
+    .all-items{
+        padding: 10px;
+        width: 1080px;
+        margin: 0 auto;
+    }
+    .button{
+        display: block;
+        margin: 10px 0;
+    }
+     .all-items > * {
+        border: solid 1px #ccc;
+        border-radius: 5px;
+        padding: 10px;
+        box-sizing: border-box;
+        margin: 10px 0;
+    }
+    h1, h2 {
+        text-align: center;
+    }
+</style>
+<body>
+  
+    <h1 >Thanks for all you do!</h1>
+
+    <h2>
+        What would you like to do? 
+    </h2>
+    
+    <div class="all-items" id="all-items">
+
+        <div class="options">
+            <form>
+                <!-- Wire up some event listeners to hide / show content -->
+                <select>
+                    <option>View Inventory</option>
+                    <option>Donation Entry</option>
+                    <option>Pet Pantry Pick-Up</option>
+                </select>
+            </form>
+        </div>
+        <!-- END OF HARD CODED STUFF-->
+      <div id="inventory" class="inventory">
+            
+        </div>
+    </div>
+
+
+
+    <script type="text/javascript">
+ 
+        // When loaded run getAllItems... 
+        window.addEventListener('load', getAllItems);
+        
+
+        /**
+         * getAllItems - This function gets your data from your DB.
+         * it perform the intial 'GET Requests'
+         *  
+         */
+        async function getAllItems() {
+            // This is some additional info sent with the request. 
+            const params = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'GET',
+                mode: 'cors'
+            };
+
+
+            // YOUR 'GET' API endpoint for GETTING DATA: '/all-items'
+            // You may have to change  '/all-items' depending on how your api is setup. 
+
+            // API response: 
+            const response = await fetch('/cat/donations', params);
+            // transforms JSON: 
+            const data = await response.json();
+            console.log(data);
+
+            // Once the data is back - send to "Show All Items "
+            showAllItems(data);
+           
+            // Gets the div where to crate the items as forms: 
+            const allItems = document.getElementById("all-items");
+            data.forEach((currentItem, currentIndex) => {
+
+                // Create elements:
+                const itemContainer = document.createElement("div");
+                const productName = document.createElement("label");
+                const formGroup = document.createElement("form");
+                const label = document.createElement("label");
+                const quantityInput = document.createElement("input");
+                const idInput = document.createElement("input");
+                const itemName = document.createElement("input");
+                const button = document.createElement("input");
+                button.type = "submit";
+                button.classList = "button";
+
+                // Setup elements: 
+                itemContainer.classList.add("item-container");
+                formGroup.classList.add("form-group");
+                quantityInput.type = "number";
+                quantityInput.name = "quantity";
+                quantityInput.value = currentItem.quantity;
+                label.innerText = "Quantity";
+                label.htmlFor = "quantity";
+                idInput.type = "hidden";
+                idInput.value = currentItem.id;
+                idInput.name = "id";
+                itemName.type = "hidden";
+                itemName.name = "item_name";
+                itemName.value = currentItem.item_name;
+                productName.innerText = currentItem.item_name;
+                
+                // Append elements: 
+                formGroup.appendChild(label);
+                formGroup.appendChild(quantityInput);
+                formGroup.appendChild(itemName);
+                formGroup.appendChild(idInput);
+                formGroup.appendChild(button);
+                itemContainer.appendChild(productName);
+                itemContainer.appendChild(formGroup);
+                allItems.appendChild(itemContainer);
+            });
+        }
+
+
+        /**
+         * Handles the submission of the forms. 
+         * This bundles the input 'names' from each form and sends it to the appropriate endpoint.  
+         */
+        window.addEventListener('submit', function(e){
+            e.preventDefault();
+            // Takes wherever a form was 'Submitted'... and get's that forms data. 
+            // Transforms it to JSON. 
+            const formData = new FormData(e.target);
+            const data = JSON.stringify(Object.fromEntries(formData));
+            // If you want to see the JSON: 
+            console.log(data);
+            // Info about HTTP Request: 
+            const params = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+                mode: 'cors',
+                body: data
+            };
+            // YOUR API endpoint that handles 'PUT' requests: 
+            fetch('/donate/cat', params);
+        });
+        
+        /**
+         * After the getAllItems runs and data is returned... 
+         * it runs this function to display the data in the inventory div... 
+         */
+        function showAllItems(items){
+            const inventory = document.getElementById('inventory');
+            items.forEach((curItem)=>{
+                const container = document.createElement('div');
+                const h3 = document.createElement('h3');
+                const quantitySpan = document.createElement('span');
+                h3.innerText = curItem.item_name;
+                quantitySpan.innerText = `Current Quantity: ${curItem.quantity}`;
+                container.appendChild(h3);
+                container.appendChild(quantitySpan);
+                inventory.appendChild(container);
+       
+            });
+        }
+    </script>
+</body>
+</html>

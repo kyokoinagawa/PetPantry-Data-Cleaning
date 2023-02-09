@@ -1,0 +1,13 @@
+package com.petpantry.petpantry;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class PetpantryApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(PetpantryApplication.class, args);
+	}
+
+}

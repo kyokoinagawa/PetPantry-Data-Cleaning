@@ -1,0 +1,77 @@
+================ Pet Pantry =================
+Take donations from the community and redistribute them to clients in need.
+
+
+There are 2 main questions to ask when coming up with a design:
+	1. What kinds of things needs to be stored/retrieved?
+	2. What is going to be done with that data?
+
+Question 1 will tell us which classes we need to make to model our application's data
+Question 2 will tell us what kind of methods we'll need to create and use the data.
+
+The backbone of a design is answering these 2 questions. Any other portion
+of a design, e.g. UI, classes to make, etc., stem from the answer to those
+2 questions.
+
+The answer to the 2 questions is dictated by the application requirements.
+Let's look at the Pet Pantry's Requirements:
+
+"
+Application should keep track of food donation inventory, pet pantry clients and their pet info,
+based on veterinary recommendations, should display amount of food to give out depending on current inventory.
+
+"
+
+======= Question 1: What kinds of things needs to be stored/retrieved? ========
+
+Phase II. Think about the structure on a high/macro level.
+        - pet info
+        - client info
+        - staff info //unnecessary
+        - inventory of food donations
+        - activity for given day (donations or giving out to pet pantry clients)
+        - veterinary recommendation file
+
+Phase III. Create classes for the remaining high-level information
+        - pet pantry (main cli)
+        - pet class (name, type, breed, age, weight)
+        - client class (name, address, #ofpets, assistance?)
+        - donate class (animal,
+            -add calculator class
+        - pickup class
+        - recommendation class (depends on inventory)
+
+
+============ Question 2: What is going to be done with that data? =============
+
+Phase I. State diagrams or UI outline
+
+Diagram any connections between states or classes to outline how they will
+interact with each other. Also indicate the flow the user can navigate to/from.
+Personally I think it's always easiest to start with the opening
+page/screen/state the user will see and go from there.
+
+Phase II. Think about how the classes from Question 1 are going to be created,
+	    updated, or removed.
+
+ - pet info
+        - client info
+        - staff info
+        - inventory of food donations
+        - activity for given day (donations or giving out to pet pantry clients)
+        - veterinary recommendation file
+
+
+when the application starts:
+* There is a current inventory
+* There is no activity
+
+When the application is running:
+* Donations can be added.
+* Donations can be given to pet pantry clients
+* Activity for a new day can be selected.
+* Total donations by day can be viewed
+* Amount of food to give out can be displayed
+
+SQL:
+
